@@ -1,9 +1,7 @@
-Tic-Tac-Toe for Android
+RecordPlayVideo
 =======================
 
-Play Tic-Tac-Toe on your Android smartphone! This app also demonstrates how to use various Android 
-programming techniques. It's the main reference for the course:
-[CSE 5236: Mobile Application Development](http://web.cse.ohio-state.edu/~champion/5236).
+Record and play back video on your Android device.
 
 License
 =======
@@ -12,8 +10,7 @@ License
 
 Contributions
 =============
-* Original code by [Prof. Rajiv Ramnath](http://web.cse.ohio-state.edu/~ramnath). (I refactored the code to use Fragments.)
-* [Android Programming: The Big Nerd Ranch Guide](https://www.bignerdranch.com/books/android-programming/) for SingleFragmentActivity
-* Assets:
-** [Sintel](http://www.sintel.org) trailer, [Blender Foundation](http://www.blender.org), 2011, CC-BY-3.0
-** John Philip Sousa, "The Stars and Stripes Forever," Edison Recordings, public domain
+* =ViewPager= code from [Big Nerd Ranch](http://www.bignerdranch.com)
+* [Mohit Gupt's code](https://www.truiton.com/2015/06/android-tabs-example-fragments-viewpager/)
+* [Dev2QA](https://www.dev2qa.com/android-play-video-file-from-local-sd-card-web-example/)
+* Asset: [Sintel](http://www.sintel.org) trailer, [Blender Foundation](http://www.blender.org), 2011, CC-BY-3.0
