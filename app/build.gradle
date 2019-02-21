@@ -1,0 +1,24 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 27
+    buildToolsVersion '28.0.3'
+
+    defaultConfig {
+        applicationId "edu.osu.recordvideo"
+        minSdkVersion 18
+        targetSdkVersion 27
+
+        buildTypes {
+            release {
+            }
+        }
+    }
+}
+
+dependencies {
+    implementation 'com.android.support:support-v13:27.1.1'
+    implementation 'com.android.support:appcompat-v7:27.1.1'
+    implementation 'com.android.support:design:27.1.1'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+}

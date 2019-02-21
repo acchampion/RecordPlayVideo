@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">RecordPlayVideo</string>
+    <string name="stop_rec">Stopped recording. Video stored in </string>
+    <string name="start_rec">Started recording…</string>
+    <string name="start_stop_recording">Start/Stop Recording</string>
+    <string name="open_button_text">Open</string>
+    <string name="play_button_text">Play</string>
+    <string name="stop_button_text">Stop</string>
+    <string name="video_source">Video: Blender Foundation, “<a href="http://www.sintel.org">Sintel Trailer</a>”, 2011, © Blender Foundation (CC-BY-3.0).</string>
+
+</resources>
