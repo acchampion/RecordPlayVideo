@@ -19,42 +19,33 @@
         android:gravity="center|center_horizontal"
         android:orientation="horizontal">
 
-        <ImageButton
+        <Button
             android:id="@+id/openButton"
-            style="@style/Widget.AppCompat.Button.Borderless"
+            style="@style/Widget.AppCompat.Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_weight="1"
-            android:adjustViewBounds="true"
-            android:contentDescription="@string/open_button_text"
-            android:scaleType="centerCrop"
-            android:src="@drawable/ic_movie_black_24dp"/>
+            android:text="@string/open_button_text"/>
 
-        <ImageButton
+        <Button
             android:id="@+id/playButton"
-            style="@style/Widget.AppCompat.Button.Borderless"
+            style="@style/Widget.AppCompat.Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_weight="1"
-            android:adjustViewBounds="true"
-            android:contentDescription="@string/play_button_text"
-            android:scaleType="centerCrop"
-            android:src="@drawable/ic_play_arrow_black_24dp"/>
+            android:text="@string/play_button_text"/>
 
-        <ImageButton
+        <Button
             android:id="@+id/stopButton"
-            style="@style/Widget.AppCompat.Button.Borderless"
+            style="@style/Widget.AppCompat.Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_weight="1"
-            android:adjustViewBounds="true"
-            android:contentDescription="@string/stop_button_text"
-            android:scaleType="centerCrop"
-            android:src="@drawable/ic_stop_black_24dp"/>
+            android:text="@string/stop_button_text"/>
     </LinearLayout>
 
     <TextView

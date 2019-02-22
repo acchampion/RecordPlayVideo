@@ -10,7 +10,6 @@ License
 
 Contributions
 =============
-* ViewPager code from [Big Nerd Ranch](http://www.bignerdranch.com)
-* [Mohit Gupt's code](https://www.truiton.com/2015/06/android-tabs-example-fragments-viewpager/)
-* [Dev2QA](https://www.dev2qa.com/android-play-video-file-from-local-sd-card-web-example/)
+* ViewPager code adapted from: Bill Phillips et al., [Android Programming: The Big Nerd Ranch Guide](https://www.bignerdranch.com/books/android-programming/), 3rd ed., Pearson, 2017. (Chapter 11) and [Mohit Gupt's code](https://www.truiton.com/2015/06/android-tabs-example-fragments-viewpager/)
+* [Dev2QA's page on video playback](https://www.dev2qa.com/android-play-video-file-from-local-sd-card-web-example/)
 * **Asset:** [Sintel](http://www.sintel.org) trailer, [Blender Foundation](http://www.blender.org), 2011, CC-BY-3.0

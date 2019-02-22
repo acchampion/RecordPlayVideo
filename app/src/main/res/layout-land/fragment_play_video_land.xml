@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="horizontal"
               android:layout_width="match_parent"
-              android:layout_height="match_parent">
+              android:layout_height="match_parent"
+              android:gravity="fill_horizontal"
+              android:orientation="horizontal">
 
     <VideoView
         android:id="@+id/videoView"
@@ -13,47 +14,37 @@
     <LinearLayout
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:layout_margin="16dp">
+        android:layout_margin="16dp"
+        android:gravity="fill"
+        android:orientation="vertical">
 
-        <ImageButton
+        <Button
             android:id="@+id/openButton"
-            style="@style/Base.Widget.AppCompat.Button.Borderless"
-            android:layout_width="wrap_content"
+            style="@style/Base.Widget.AppCompat.Button"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:layout_weight="1"
-            android:adjustViewBounds="true"
-            android:contentDescription="@string/open_button_text"
-            android:cropToPadding="false"
-            android:scaleType="centerCrop"
-            android:src="@drawable/ic_movie_black_24dp"/>
+            android:text="@string/open_button_text"/>
 
-        <ImageButton
+        <Button
             android:id="@+id/playButton"
-            style="@style/Base.Widget.AppCompat.Button.Borderless"
-            android:layout_width="wrap_content"
+            style="@style/Base.Widget.AppCompat.Button"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:layout_marginTop="8dp"
             android:layout_weight="1"
-            android:adjustViewBounds="true"
-            android:contentDescription="@string/play_button_text"
-            android:scaleType="fitXY"
-            android:src="@drawable/ic_play_arrow_black_24dp"/>
+            android:text="@string/play_button_text"/>
 
-        <ImageButton
+        <Button
             android:id="@+id/stopButton"
-            style="@style/Base.Widget.AppCompat.Button.Borderless"
-            android:layout_width="wrap_content"
+            style="@style/Base.Widget.AppCompat.Button"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_weight="1"
-            android:adjustViewBounds="true"
-            android:contentDescription="@string/stop_button_text"
-            android:scaleType="center"
-            android:src="@drawable/ic_stop_black_24dp"/>
+            android:text="@string/stop_button_text"/>
 
         <TextView
             android:layout_width="match_parent"

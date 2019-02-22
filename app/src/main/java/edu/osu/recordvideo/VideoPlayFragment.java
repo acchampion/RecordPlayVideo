@@ -15,7 +15,7 @@ import android.view.LayoutInflater;
 import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
+import android.widget.Button;
 import android.widget.Toast;
 import android.widget.VideoView;
 
@@ -31,7 +31,7 @@ import static android.app.Activity.RESULT_OK;
 public class VideoPlayFragment extends Fragment implements View.OnClickListener {
     private ViewGroup mContainer;
     private VideoView mVideoView;
-    private ImageButton mOpenButton, mPlayButton, mStopButton;
+    private Button mOpenButton, mPlayButton, mStopButton;
     private Uri mVideoFileUri;
 
     private final String TAG = getClass().getSimpleName();
