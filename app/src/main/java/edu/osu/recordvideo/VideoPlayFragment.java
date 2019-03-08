@@ -36,9 +36,11 @@ public class VideoPlayFragment extends Fragment implements View.OnClickListener 
 
     private final String TAG = getClass().getSimpleName();
     private final int PERMISSION_STORAGE_REQUEST = 1, REQUEST_VIDEO_FILE = 2;
+    private final String VIDEO_URI = "video_uri", SEEK_POS = "seek_pos";
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Log.d(TAG, "onCreateView()");
         View v = getViewBasedOnRotation(inflater, container);
         mContainer = container;
 
@@ -55,6 +57,19 @@ public class VideoPlayFragment extends Fragment implements View.OnClickListener 
 
         setRetainInstance(true);
 
+        if (savedInstanceState != null) {
+            String uriStr = savedInstanceState.getString(VIDEO_URI, "");
+            if (uriStr.length() > 0) {
+                mVideoFileUri = Uri.parse(uriStr);
+            }
+
+            int seekPos = savedInstanceState.getInt(SEEK_POS, 0);
+            if (seekPos > 0) {
+                mVideoView.seekTo(seekPos);
+                mVideoView.resume();
+            }
+        }
+
         return v;
     }
 
@@ -68,11 +83,15 @@ public class VideoPlayFragment extends Fragment implements View.OnClickListener 
                 startActivityForResult(selectVideoIntent, REQUEST_VIDEO_FILE);
                 break;
             case R.id.playButton:
-                mVideoView.setVideoURI(mVideoFileUri);
-                mVideoView.start();
+                if (mVideoFileUri != null) {
+                    mVideoView.setVideoURI(mVideoFileUri);
+                    mVideoView.start();
+                    mPlayButton.setEnabled(false);
+                }
                 break;
             case R.id.stopButton:
                 mVideoView.stopPlayback();
+                mPlayButton.setEnabled(true);
                 break;
         }
     }
@@ -86,6 +105,11 @@ public class VideoPlayFragment extends Fragment implements View.OnClickListener 
         mPlayButton.setOnClickListener(this);
         mStopButton = v.findViewById(R.id.stopButton);
         mStopButton.setOnClickListener(this);
+
+        if (mVideoFileUri == null) {
+            mPlayButton.setEnabled(false);
+            mStopButton.setEnabled(false);
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -145,5 +169,18 @@ public class VideoPlayFragment extends Fragment implements View.OnClickListener 
         }
 
         return v;
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle savedInstanceState) {
+        Log.d(TAG, "onSaveInstanceState()");
+        if (mVideoFileUri != null) {
+            savedInstanceState.putString(VIDEO_URI, mVideoFileUri.toString());
+        }
+
+        if (mVideoView != null) {
+            int seekPos = mVideoView.getCurrentPosition();
+            savedInstanceState.putInt(SEEK_POS, seekPos);
+        }
     }
 }

@@ -27,7 +27,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class VideoRecordFragment extends Fragment implements View.OnClickListener{
+public class VideoRecordFragment extends Fragment implements View.OnClickListener {
     // Instance fields.
     private CameraSurfaceView mCameraSurfaceView;
     private Camera mCamera;
@@ -50,14 +50,13 @@ public class VideoRecordFragment extends Fragment implements View.OnClickListene
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (lacksCameraPermissions()) {
-                requestPermissions(new String[]{ Manifest.permission.CAMERA,
+                requestPermissions(new String[]{Manifest.permission.CAMERA,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE,
                         Manifest.permission.RECORD_AUDIO}, PERMISSION_CAMCORDER_REQUEST);
             } else {
                 setUpCamera();
             }
-        }
-        else {
+        } else {
             setUpCamera();
         }
     }

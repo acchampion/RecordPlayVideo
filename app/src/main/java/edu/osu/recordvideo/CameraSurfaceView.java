@@ -85,6 +85,9 @@ public class CameraSurfaceView extends SurfaceView implements
             }
         } catch (IOException e) {
             Log.d(TAG, "Error setting camera preview: " + e.getMessage());
+        } catch (RuntimeException re) {
+            Log.d(TAG, "Could not configure camera surface; camera released");
+            re.printStackTrace();
         }
     }
 
