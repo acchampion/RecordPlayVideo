@@ -1,19 +1,172 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
-    <FrameLayout android:id="@+id/camera_preview"
-        android:layout_width="fill_parent" 
-        android:layout_height="fill_parent">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/client_server_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/client_server_toggle_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="0dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="0dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginStart="8dp"
+                android:lineSpacingExtra="8sp"
+                android:text="@string/client_or_server_text"
+                android:textColor="@android:color/black"
+                android:textSize="18sp"/>
+
+            <ToggleButton
+                android:id="@+id/client_server_togglebutton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:textOff="@string/client_button_text"
+                android:textOn="@string/server_button_text"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/server_only_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+
+            <TextView
+                android:id="@+id/server_ip_address_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="0dp"
+                android:text="@string/ip_address_text"
+                android:textColor="@android:color/black"/>
+
+            <TextView
+                android:id="@+id/server_ip_address_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="0dp"
+                android:layout_marginTop="0dp"
+                android:text="123.156.167.189"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="0dp"
+                android:labelFor="@id/server_port_edittext"
+                android:text="@string/port_text"
+                android:textColor="@android:color/black"/>
+
+            <EditText
+                android:id="@+id/server_port_edittext"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:autofillHints="@string/server_ip_address_text"
+                android:inputType="number"
+                android:text="@string/default_port_num"/>
+
+            <Button
+                android:id="@+id/bind_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/listen_text"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/client_only_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/server_ip_address_label_client"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="0dp"
+                android:labelFor="@id/server_ip_address_edittext_client"
+                android:text="@string/server_ip_address_text"
+                android:textColor="@android:color/black"/>
+
+            <EditText
+                android:id="@+id/server_ip_address_edittext_client"
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:autofillHints="Enter server IP address"
+                android:inputType="number"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="0dp"
+                android:labelFor="@id/server_port_edittext_client"
+                android:text="@string/port_text"
+                android:textColor="@android:color/black"/>
+
+            <EditText
+                android:id="@+id/server_port_edittext_client"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:inputType="number"
+                android:text="@string/default_port_num"/>
+
+            <Button
+                android:id="@+id/connect_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/connect_text"/>
+
+        </LinearLayout>
+    </LinearLayout>
+
+
+    <FrameLayout
+        android:id="@+id/camera_preview"
+        android:layout_width="fill_parent"
+        android:layout_height="450dp"
+        android:layout_below="@id/client_server_layout">
     </FrameLayout>
-    <ImageButton android:id="@+id/button"
+
+    <ImageButton
+        android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/camera_preview"
         android:layout_alignEnd="@id/camera_preview"
         android:layout_alignTop="@id/camera_preview"
-        android:src="@drawable/ic_videocam_grey600_48dp"
-        android:contentDescription="@string/start_stop_recording"/>
+        android:layout_below="@id/camera_preview"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        android:contentDescription="@string/start_stop_recording"
+        android:src="@drawable/ic_videocam_grey600_48dp"/>
 
 </RelativeLayout>

@@ -9,5 +9,15 @@
     <string name="play_button_text">Play</string>
     <string name="stop_button_text">Stop</string>
     <string name="video_source">Video: Blender Foundation, “<a href="http://www.sintel.org">Sintel Trailer</a>”, 2011, © Blender Foundation (CC-BY-3.0).</string>
+    <string name="client_or_server_text">Status:</string>
+    <string name="client_button_text">Client</string>
+    <string name="server_button_text">Server</string>
+    <string name="ip_address_text">IP Address</string>
+    <string name="port_text">Port #</string>
+    <string name="default_port_num">8081</string>
+    <string name="listen_text">Listen</string>
+    <string name="connect_text">Connect</string>
+    <string name="server_ip_address_text">Server\nIP Address</string>
+    <string name="client_server_key">status</string>
 
 </resources>

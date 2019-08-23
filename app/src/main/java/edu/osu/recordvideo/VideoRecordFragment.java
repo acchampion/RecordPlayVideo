@@ -2,45 +2,66 @@ package edu.osu.recordvideo;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
 import android.media.CamcorderProfile;
 import android.media.MediaRecorder;
+import android.net.ConnectivityManager;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.annotation.NonNull;
-import android.support.annotation.RequiresApi;
-import android.support.v4.app.Fragment;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import java.io.File;
 import java.io.IOException;
+import java.math.BigInteger;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.nio.ByteOrder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class VideoRecordFragment extends Fragment implements View.OnClickListener {
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.fragment.app.Fragment;
+
+public class VideoRecordFragment extends Fragment implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
     // Instance fields.
     private CameraSurfaceView mCameraSurfaceView;
     private Camera mCamera;
     private MediaRecorder mMediaRecorder;
     private Boolean mIsRecording = false;
     private static File mVideoDir;
+    private WifiManager mWifiManager;
+    private ConnectivityManager mConnectivityManager;
 
     private final String TAG = getClass().getSimpleName();
     private final int PERMISSION_CAMCORDER_REQUEST = 1;
 
+
+    private enum CLIENT_SERVER_STATE {CLIENT, SERVER}
+
+    private CLIENT_SERVER_STATE mClientServerState;
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        //setRetainInstance(true);
         return getViewBasedOnRotation(inflater, container);
     }
 
@@ -59,60 +80,95 @@ public class VideoRecordFragment extends Fragment implements View.OnClickListene
         } else {
             setUpCamera();
         }
+
+        initClientServerState();
+
+        Activity activity = getActivity();
+        if (activity != null) {
+            mWifiManager = (WifiManager) activity.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+            mConnectivityManager = (ConnectivityManager) activity.getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        }
     }
+
+    private void writeStatus(Activity activity) {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(activity.getApplicationContext());
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        if (mClientServerState.equals(CLIENT_SERVER_STATE.SERVER)) {
+            editor.putString(activity.getString(R.string.client_server_key), "server");
+        } else {
+            editor.putString(activity.getString(R.string.client_server_key), "client");
+        }
+        editor.apply();
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        Activity activity = getActivity();
+
+        if (activity != null) {
+            // If the button's checked, we selected "server"; otherwise, it's "client".
+            if (isChecked) {
+                mClientServerState = CLIENT_SERVER_STATE.SERVER;
+            } else {
+                mClientServerState = CLIENT_SERVER_STATE.CLIENT;
+            }
+            writeStatus(activity);
+            doInitStateAndLayouts(activity);
+        }
+    }
+
 
     @Override
     public void onClick(View v) {
         final Activity activity = getActivity();
-        switch (v.getId()) {
-            case R.id.button:
-                if (activity != null) {
-                    if (mIsRecording) {
-                        activity.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                ImageButton imgButton = (activity.findViewById(R.id.button));
-                                imgButton.setImageResource(R.drawable.ic_videocam_grey600_48dp);
-                                mVideoDir = new File(Environment.getExternalStoragePublicDirectory(
-                                        Environment.DIRECTORY_MOVIES), "RecordVideo");
-                                Toast.makeText(activity.getApplicationContext(),
-                                        getText(R.string.stop_rec) + mVideoDir.toString(),
-                                        Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                        // stop recording and release camera
-                        mMediaRecorder.stop();  // stop the recording
-                        releaseMediaRecorder(); // release the MediaRecorder object
-                        mCamera.lock();         // take camera access back from MediaRecorder
-
-                        // inform the user that recording has stopped
-                        mIsRecording = false;
-                    } else {
-                        activity.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                ImageButton imgButton = (activity.findViewById(R.id.button));
-                                imgButton.setImageResource(R.drawable.ic_videocam_off_grey600_48dp);
-                                Toast.makeText(activity.getApplicationContext(), getText(R.string.start_rec),
-                                        Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                        // initialize video camera
-                        if (prepareVideoRecorder()) {
-                            // Camera is available and unlocked, MediaRecorder is prepared,
-                            // now you can start recording
-                            mMediaRecorder.start();
-
-                            // inform the user that recording has started
-                            mIsRecording = true;
-                        } else {
-                            // prepare didn't work, release the camera
-                            releaseMediaRecorder();
-                            // inform user
+        if (v.getId() == R.id.button) {
+            if (activity != null) {
+                if (mIsRecording) {
+                    activity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            ImageButton imgButton = (activity.findViewById(R.id.button));
+                            imgButton.setImageResource(R.drawable.ic_videocam_grey600_48dp);
+                            mVideoDir = new File(Environment.getExternalStoragePublicDirectory(
+                                    Environment.DIRECTORY_MOVIES), "RecordVideo");
+                            Toast.makeText(activity.getApplicationContext(),
+                                    getText(R.string.stop_rec) + mVideoDir.toString(),
+                                    Toast.LENGTH_SHORT).show();
                         }
+                    });
+                    // stop recording and release camera
+                    mMediaRecorder.stop();  // stop the recording
+                    releaseMediaRecorder(); // release the MediaRecorder object
+                    mCamera.lock();         // take camera access back from MediaRecorder
+
+                    // inform the user that recording has stopped
+                    mIsRecording = false;
+                } else {
+                    activity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            ImageButton imgButton = (activity.findViewById(R.id.button));
+                            imgButton.setImageResource(R.drawable.ic_videocam_off_grey600_48dp);
+                            Toast.makeText(activity.getApplicationContext(), getText(R.string.start_rec),
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    // initialize video camera
+                    if (prepareVideoRecorder()) {
+                        // Camera is available and unlocked, MediaRecorder is prepared,
+                        // now you can start recording
+                        mMediaRecorder.start();
+
+                        // inform the user that recording has started
+                        mIsRecording = true;
+                    } else {
+                        // prepare didn't work, release the camera
+                        releaseMediaRecorder();
+                        // inform user
                     }
                 }
-                break;
+            }
         }
     }
 
@@ -156,7 +212,7 @@ public class VideoRecordFragment extends Fragment implements View.OnClickListene
     /**
      * A safe way to get an instance of the Camera object.
      */
-    public Camera getCameraInstance() {
+    private Camera getCameraInstance() {
         Camera c = null;
         try {
             c = Camera.open(); // attempt to get a Camera instance
@@ -281,6 +337,9 @@ public class VideoRecordFragment extends Fragment implements View.OnClickListene
             // Get Record Button and set icon.
             ImageButton imageButton = activity.findViewById(R.id.button);
             imageButton.setOnClickListener(this);
+
+            ToggleButton toggleButton = activity.findViewById(R.id.client_server_togglebutton);
+            toggleButton.setOnCheckedChangeListener(this);
         }
     }
 
@@ -297,6 +356,61 @@ public class VideoRecordFragment extends Fragment implements View.OnClickListene
                     Toast.makeText(activity, "User denied camera permission", Toast.LENGTH_SHORT).show();
                 }
             }
+        }
+    }
+
+    private void doInitStateAndLayouts(Activity activity) {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(activity.getApplicationContext());
+        String stateStr = sharedPreferences.getString(activity.getString(R.string.client_server_key), "client");
+
+        LinearLayout clientOnlyLayout = activity.findViewById(R.id.client_only_layout);
+        LinearLayout serverOnlyLayout = activity.findViewById(R.id.server_only_layout);
+
+        if (stateStr != null) {
+            if (stateStr.equals("client")) {
+                mClientServerState = CLIENT_SERVER_STATE.CLIENT;
+                serverOnlyLayout.setVisibility(View.GONE);
+                clientOnlyLayout.setVisibility(View.VISIBLE);
+            } else {
+                mClientServerState = CLIENT_SERVER_STATE.SERVER;
+                serverOnlyLayout.setVisibility(View.VISIBLE);
+                clientOnlyLayout.setVisibility(View.GONE);
+
+                TextView ipAddressText = activity.findViewById(R.id.server_ip_address_text);
+                if (mWifiManager != null) {
+                    // This endian-ness code is from Stack Overflow.
+                    WifiInfo wifiInfo = mWifiManager.getConnectionInfo();
+                    if (wifiInfo != null) {
+                        int ipAddress = wifiInfo.getIpAddress();
+
+                        // Convert little-endian to big-endian if needed
+                        if (ByteOrder.nativeOrder().equals(ByteOrder.LITTLE_ENDIAN)) {
+                            ipAddress = Integer.reverseBytes(ipAddress);
+                        }
+
+                        byte[] ipByteArray = BigInteger.valueOf(ipAddress).toByteArray();
+
+                        String ipAddressString;
+                        try {
+                            ipAddressString = InetAddress.getByAddress(ipByteArray).getHostAddress();
+                            ipAddressText.setText(ipAddressString);
+                        } catch (UnknownHostException ex) {
+                            Log.e("WIFIIP", "Unable to get host address.");
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+
+    private void initClientServerState() {
+        Activity activity = getActivity();
+
+        if (activity != null) {
+            doInitStateAndLayouts(activity);
+        } else {
+            Log.e(TAG, "Activity is null, cannot restore client/server state!");
         }
     }
 
